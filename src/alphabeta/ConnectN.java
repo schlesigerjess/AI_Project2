@@ -1,6 +1,7 @@
 package alphabeta;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class ConnectN {
 
@@ -45,26 +46,55 @@ public class ConnectN {
 		else throw new RuntimeException("Error - invalid board state, B="+numB+", R="+numR);
 	}
 
+	/** 
+	 * Reads in the column the player wants to place a piece into
+	 * @author Jessica Schlesiger
+	 * @return the colum the player will play in
+	 */
+	public int readMove() {
+		int num=-1;
+		boolean retry=false;
+		Scanner sca=new Scanner(System.in);
+		do {
+			retry=false;
+			System.out.println("Enter Column for move:");
+			num = sca.nextInt();
+			if (num >= colSize || num < 0) {
+				if (num == -1)
+				{
+					System.exit(1); // -1 terminates the program
+				}
+				System.out.println("That number is invaild. Try again.");
+				retry=true;
+			}
+		} while(retry);
+		return num;
 
+	}
+
+	/**
+	 * Prints out a readable board 
+	 * @author Jessica Schlesiger
+	 */
 	public String toString() {
 		String printBoard="";
-		
+
 		for (int r=0; r<rowSize+1; r++) {
 			if (r != 0)
-				printBoard=printBoard+(r-1)+" | ";
+				printBoard=printBoard+(r-1)+" | "; // Sidebar numbers
 			for (int c=0;c<colSize;c++) {
-				if (r == 0) {
+				if (r == 0) { 					// Top bar numbers
 					if (c==0) {
 
 						printBoard=printBoard+"  | 0 | ";
 					} else
-					printBoard=printBoard+(c)+" | ";
+						printBoard=printBoard+(c)+" | ";
 				}
 				else
-				printBoard = printBoard + board[r-1][c] +" | ";
+					printBoard = printBoard + board[r-1][c] +" | ";
 			}
-				printBoard= printBoard+"\n";
-			
+			printBoard= printBoard+"\n";
+
 		}
 		return printBoard;
 	}
@@ -75,7 +105,7 @@ public class ConnectN {
 	 * @return 0 = Nothing, -1 = red wins, 1 = black wins
 	 * @Author Jessica Schlesiger **/
 	public boolean checkDiagonalWin(int x, int y) {
-		
+
 
 		int count=0, row, col;
 		if (x > y) {
@@ -104,26 +134,26 @@ public class ConnectN {
 		if (x+y >= colSize) {
 			col=colSize-1;
 		}else
-		col=x+y;
+			col=x+y;
 		if (x+y >= rowSize) {
 			row=Math.abs(rowSize-(x+y));
 		}
-			else
-		row=0;
+		else
+			row=0;
 
 
 		// *** CHECKS / DIRECTION *** //
 		while(row<rowSize && col>-1) {
-					if (board[row][col] == lastPlayed) {
-						count++;
-					} else
-						count=0;
-					if (count >= size)
-						return true;
+			if (board[row][col] == lastPlayed) {
+				count++;
+			} else
+				count=0;
+			if (count >= size)
+				return true;
 
-					row++;
-					col--;
-				}
+			row++;
+			col--;
+		}
 		return false;
 	}
 	/**
@@ -157,11 +187,11 @@ public class ConnectN {
 		// Check if a row is a win
 		if (checkRowWin(row))
 			return true;
-		
+
 		// Check if diagonal win
 		if (checkDiagonalWin(row , col))
 			return true;
-		
+
 
 		return false; // If no wins, return 0
 	}

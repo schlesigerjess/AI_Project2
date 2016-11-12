@@ -7,6 +7,25 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 /** This tests our ConnectN class **/
 public class testConnectN {
 
+	
+	/**
+	 * Tests readMove
+	 * @author Jessica Schlesiger
+	 */
+	@Test
+	public void readMove() {
+		char board[][] = {
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
+				{ ' ', ' ', 'R', 'R', ' ', ' ', ' ' },
+				{ ' ', 'R', 'B', 'B', ' ', ' ', ' ' },
+				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
+		};
+		ConnectN c = new ConnectN(board);
+		assertEquals(3, c.readMove()); // input three
+		
+	}
 	/**
 	 * Tests toString
 	 * @author Jessica Schlesiger
