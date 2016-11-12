@@ -1,4 +1,7 @@
 package alphabeta;
+
+import java.util.Arrays;
+
 public class ConnectN {
 
 	int size;
@@ -42,6 +45,29 @@ public class ConnectN {
 		else throw new RuntimeException("Error - invalid board state, B="+numB+", R="+numR);
 	}
 
+
+	public String toString() {
+		String printBoard="";
+		
+		for (int r=0; r<rowSize+1; r++) {
+			if (r != 0)
+				printBoard=printBoard+(r-1)+" | ";
+			for (int c=0;c<colSize;c++) {
+				if (r == 0) {
+					if (c==0) {
+
+						printBoard=printBoard+"  | 0 | ";
+					} else
+					printBoard=printBoard+(c)+" | ";
+				}
+				else
+				printBoard = printBoard + board[r-1][c] +" | ";
+			}
+				printBoard= printBoard+"\n";
+			
+		}
+		return printBoard;
+	}
 
 
 	/**

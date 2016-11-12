@@ -7,6 +7,26 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 /** This tests our ConnectN class **/
 public class testConnectN {
 
+	/**
+	 * Tests toString
+	 * @author Jessica Schlesiger
+	 */
+	@Test
+	public void testToString() {
+		char board[][] = {
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
+				{ ' ', ' ', 'R', 'R', ' ', ' ', ' ' },
+				{ ' ', 'R', 'B', 'B', ' ', ' ', ' ' },
+				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
+		};
+		ConnectN c = new ConnectN(board);
+		assertEquals("  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | \n0 |   |   |   |   |   |   |   | \n1 |   |   |   |   |   |   |   "
+				+ "| \n2 |   |   |   | R |   |   |   | \n3 |   |   | R | R |   |   |   | \n4 |   | R | B | B |   |   |  "
+				+ " | \n5 | R | B | B | B |   |   |   | \n", c.toString());
+	}
+
 	/** Tests if it can find  the top most piece
 	 * @author Jessica Schlesiger **/
 	@Test
@@ -73,7 +93,7 @@ public class testConnectN {
 		c = new ConnectN(board3);
 		assertEquals('B', c.lastPlayed);
 		assertEquals(false, c.checkWinOrLoss(0)); // no  win
-		
+
 	}
 
 	/**
