@@ -39,7 +39,7 @@ public class ConnectN {
 		this.depth = numB + numR;
 		if (numB == numR) this.lastPlayed = 'R';
 		else if ((numB - numR) == 1) this.lastPlayed = 'B';
-		else throw new RuntimeException("Error - invalid board state");
+		else throw new RuntimeException("Error - invalid board state, B="+numB+", R="+numR);
 	}
 
 
@@ -49,6 +49,7 @@ public class ConnectN {
 	 * @return 0 = Nothing, -1 = red wins, 1 = black wins
 	 * @Author Jessica Schlesiger **/
 	public boolean checkDiagonalWin(int x, int y) {
+		
 
 		int count=0, row, col;
 		if (x > y) {
@@ -115,21 +116,26 @@ public class ConnectN {
 	 * @return 0 = Nothing, -1 = red wins, 1 = black wins
 	 * @Author Jessica Schlesiger **/
 	public boolean checkWinOrLoss(int col) {
-		//int blackWon=1, redWon=-1;
-		//checkRowWin();
+
+		if (col > colSize) 
+			throw new RuntimeException("Error - col coordinate too large");
+
 		int row = getTopMostColPiece(col);
 
 		// Check if a col is a win
 		if ((rowSize-row) >= 0) {
-			boolean colWin = checkColumnWin(row, col);
-			if (colWin)
-				return colWin;
+			if (checkColumnWin(row, col))
+				return true;
 		}
 
 		// Check if a row is a win
-		boolean rowWin = checkRowWin(row , col);
-		if (rowWin)
-			return rowWin;
+		if (checkRowWin(row))
+			return true;
+		
+		// Check if diagonal win
+		if (checkDiagonalWin(row , col))
+			return true;
+		
 
 		return false; // If no wins, return 0
 	}
@@ -154,13 +160,13 @@ public class ConnectN {
 	/** Checks for wins in the rows
 	 * @return 0 = Nothing, -1 = red wins, 1 = black wins
 	 * @Author Jessica Schlesiger **/
-	public boolean checkRowWin(int row, int col) {
+	public boolean checkRowWin(int row) {
 		int rowSet=0;
 		for (int c = 0; c < colSize; c++) { // Column
 			if (board[row][c] == lastPlayed) {
 				rowSet++;
 			} else
-				return false;
+				rowSet=0;
 			if (rowSet >= size)  // if red wins
 				return true;
 
