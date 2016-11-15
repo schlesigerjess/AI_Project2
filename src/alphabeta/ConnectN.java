@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class ConnectN {
+public class ConnectN implements State {
 
 	int size;
 	int rowSize, colSize;
@@ -403,84 +403,91 @@ public class ConnectN {
 				if (board[r][c] == ' ') numSp++;
 			}
 			
-			if ((numR > 0) && (numB == 0) && (numSp > 0)) total += (numR * rowSize);
-			if ((numB > 0) && (numR == 0) && (numSp > 0)) total -= (numB * colSize);
+			if ((numR > 0) && (numB == 0) && (numSp > 0)) total += (numR * size);
+			if ((numB > 0) && (numR == 0) && (numSp > 0)) total -= (numB * size);
 		}
 		
 		for (int c = 0; c < colSize; c++)
 		{
 			
-			int numX  = 0; 
-			int numO = 0;
+			int numR  = 0; 
+			int numB = 0;
 			int numSp = 0;
 			
 			for (int r = 0; r < rowSize; r++)
 			{
-				if (board[r][c] == 'X') numX++;
-				if (board[r][c] == 'O') numO++;
+				if (board[r][c] == 'X') numR++;
+				if (board[r][c] == 'O') numB++;
 				if (board[r][c] == ' ') numSp++;
 			}
 			
-			if ((numX > 0) && (numO == 0)) total += (numX * size);
-			if ((numO > 0) && (numX == 0)) total -= (numO * size);
-		}
-		
-		{
-			int numX  = 0; 
-			int numO = 0;
-			int numSp = 0;
-		
-		
-			for (int i = 0; i < size; i++)
-			{
-				
-				
-				if (board[i][i] == 'X') numX++;
-				if (board[i][i] == 'O') numO++;
-				if (board[i][i] == ' ') numSp++;
-			}
-				
-			if ((numX > 0) && (numO == 0)) total += (numX * size);
-			if ((numO > 0) && (numX == 0)) total -= (numO * size); 
+			if ((numR > 0) && (numB == 0)) total += (numR * size);
+			if ((numB > 0) && (numR == 0)) total -= (numB * size);
 		}
 		
 		
-		{
-			int numX  = 0; 
-			int numO = 0;
-			int numSp = 0;
-		
-		
-			for (int i = 0; i < size; i++)
-			{
-				
-				
-				if (board[i][size - i - 1] == 'X') numX++;
-				if (board[i][size - i - 1] == 'O') numO++;
-				if (board[i][size - i - 1] == ' ') numSp++;
-			}
-				
-			if ((numX > 0) && (numO == 0)) total += (numX * size);
-			if ((numO > 0) && (numX == 0)) total -= (numO * size);
-		}
 		
 		return total;
 		
 	}
 	
-//	@Override
-//	public int getDepth() {
-//		return this.depth;
-//	}
-//
-//	@Override
-//	public char getPlayer( )
-//	{
-//		if (this.lastPlayed == 'X') 
-//			return 'O';
-//		else
-//			return 'X';
-//	}
+	@Override
+	public int getDepth() {
+		return this.depth;
+	}
+
+	@Override
+	public char getPlayer( )
+	{
+		if (this.lastPlayed == 'R') 
+			return 'B';
+		else
+			return 'R';
+	}
 	
+	public static void main(String args[])
+	{
+//		char board[][] = {
+//				{ 'O', ' ', ' ',' ',' ' },
+//				{ ' ', 'X', ' ',' ',' ' },
+//				{ ' ', ' ', ' ',' ', ' ' },
+//				{ ' ', ' ', ' ',' ', ' ' },
+//				{ ' ', ' ', ' ',' ', ' ' }
+//				
+//		};
+		
+		char board[][] = { 
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
+				{ ' ', ' ', 'R', 'R', ' ', ' ', ' ' },
+				{ ' ', 'R', 'B', 'B', ' ', ' ', ' ' },
+				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
+		};
+		
+		ConnectN T = new ConnectN(board);
+
+		boolean use_ab = true;
+		
+		if (! use_ab) {
+			Minimax M = new Minimax();
 	
+			State S = M.minimax_decision(T);
+			System.out.println(S);
+		}
+		else {
+			AlphaBeta ab = new AlphaBeta('R', 10);
+			State move = ab.getMove(T, false, 7);
+			System.out.println(move);
+		}
+		
+	}
+
+	@Override
+	public LinkedList<State> getNext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
+
+
