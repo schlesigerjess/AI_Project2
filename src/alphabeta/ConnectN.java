@@ -67,7 +67,7 @@ public class ConnectN implements State {
 	public int readMove() {
 		int num=-1;
 		boolean retry=false;
-		Scanner sca=new Scanner(System.in);
+		Scanner sca = new Scanner(System.in);
 		do {
 			retry=false;
 			System.out.println("Enter Column for move:");
