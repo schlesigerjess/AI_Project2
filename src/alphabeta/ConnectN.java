@@ -254,7 +254,10 @@ public class ConnectN {
 		return false;
 	}
 	
-	
+	/**
+	 * @author shanjones & Dr.Briggs
+	 * @return
+	 */
 	public boolean isDraw( )
 	{
 		for (int r = 0; r < rowSize; r++)
@@ -270,7 +273,10 @@ public class ConnectN {
 	}
 	
 	
-	
+	/**
+	 * @author shanjones & Dr. briggs
+	 * @return
+	 */
 	public LinkedList<State> next( )
 	{
 		LinkedList<State> next = new LinkedList<State>( );
@@ -289,6 +295,10 @@ public class ConnectN {
 		return next;
 	}
 
+	/**
+	 * @author shanjones & Dr.Briggs
+	 * @return
+	 */
 	public boolean isTerminal( )
 	{
 		//
@@ -316,7 +326,10 @@ public class ConnectN {
 		return false;
 	}
 	
-	
+	/**
+	 * @author shanjones & Dr. Briggs
+	 * @return
+	 */
 	public int utility( )
 	{
 		for(int i = 0; i < colSize; i++)
@@ -352,6 +365,11 @@ public class ConnectN {
 		}
 	}
 	
+	
+	/**
+	 * @author shanjones & Dr.Briggs
+	 * @return
+	 */
 	public int evaluate( )
 	{
 		for(int i = 0; i < colSize; i++)
