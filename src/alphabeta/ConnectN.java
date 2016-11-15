@@ -1,6 +1,7 @@
 package alphabeta;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class ConnectN {
@@ -10,6 +11,7 @@ public class ConnectN {
 	char board[][];
 	char lastPlayed = 'R';
 	int depth = 0;
+	int track = 0;
 
 	/** Creates empty board **/
 	public ConnectN (int size) {
@@ -23,6 +25,17 @@ public class ConnectN {
 		lastPlayed = 'R';
 	}
 
+	public ConnectN ( ConnectN T)
+	{
+		this.size = T.size;
+		this.board = new char[size][size];
+		for (int r = 0; r < size; r++) 
+			for (int c = 0; c < size; c++)
+				this.board[r][c] = T.board[r][c];
+		
+		this.lastPlayed = T.lastPlayed;
+		this.depth = T.depth;
+	}
 
 	/** Takes in a current board state **/
 	public ConnectN(char board[][])
@@ -195,6 +208,17 @@ public class ConnectN {
 
 		return false; // If no wins, return 0
 	}
+	
+	public int getColSize()
+	{
+		return colSize;
+	}
+	
+	public int getRowSize()
+	{
+		return rowSize;
+	}
+	
 	/**
 	 * Checks for a win in a column
 	 * @return true/false
@@ -229,4 +253,216 @@ public class ConnectN {
 		}
 		return false;
 	}
+	
+	
+	public boolean isDraw( )
+	{
+		for (int r = 0; r < rowSize; r++)
+		{
+			for (int c = 0; c < colSize; c++)
+			{
+				if (board[r][c] == ' ') return false;
+				if (checkWinOrLoss(c)) return false;
+				if (checkWinOrLoss(c)) return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	public LinkedList<State> next( )
+	{
+		LinkedList<State> next = new LinkedList<State>( );
+		for (int r = 0; r < rowSize; r++)
+			for (int c = 0; c < colSize; c++)
+			{
+				if (board[r][c] == ' ') {
+					ConnectN t = new ConnectN(this);
+					t.board[r][c] = (lastPlayed == 'R') ? 'B' : 'R';
+					t.lastPlayed = (lastPlayed == 'R') ? 'B' : 'R';
+					t.depth++;
+					next.add((State) t);
+				}
+			}
+		
+		return next;
+	}
+
+	public boolean isTerminal( )
+	{
+		//
+		for(int i =0 ; i < colSize; i++)
+		{
+			if (checkWinOrLoss(i)) return true;
+		}
+		
+		//!!!! depth
+		if (this.depth > 8) return true;
+		
+		LinkedList<State> children = next( );
+		for (State S : children) {
+			
+			ConnectN T = (ConnectN) S;
+			
+			for(int i =0 ; i < colSize; i++)
+			{
+				if (T.checkWinOrLoss(i) || T.isDraw())
+					return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
+	
+	public int utility( )
+	{
+		for(int i = 0; i < colSize; i++)
+		{
+			if((lastPlayed == 'R') && (checkWinOrLoss(i)))
+			{
+				return 1000;
+			}
+			
+			if((lastPlayed == 'B') && (checkWinOrLoss(i)))
+			{
+				return -1000;
+			}
+			
+			if (isDraw()) return 0;
+		}
+		
+		
+		if (isTerminal()) {
+			int sum = 0;
+			LinkedList<State> children = next( );
+			for (State S : children) {
+				
+				ConnectN T = (ConnectN) S;
+				sum += T.evaluate();
+			}	
+			
+			return sum;
+		}
+		
+		else {
+			return evaluate();
+		}
+	}
+	
+	public int evaluate( )
+	{
+		for(int i = 0; i < colSize; i++)
+		{
+			if((lastPlayed == 'R') && (checkWinOrLoss(i)))
+			{
+				return 1000;
+			}
+			
+			if((lastPlayed == 'B') && (checkWinOrLoss(i)))
+			{
+				return -1000;
+			}
+			
+			if (isDraw()) return 0;
+		}
+		
+		int total = 0;
+		
+		for (int r = 0; r < rowSize; r++)
+		{
+			
+			int numR  = 0; 
+			int numB = 0;
+			int numSp = 0;
+			
+			for (int c = 0; c < colSize; c++)
+			{
+				if (board[r][c] == 'R') numR++;
+				if (board[r][c] == 'B') numB++;
+				if (board[r][c] == ' ') numSp++;
+			}
+			
+			if ((numR > 0) && (numB == 0) && (numSp > 0)) total += (numR * rowSize);
+			if ((numB > 0) && (numR == 0) && (numSp > 0)) total -= (numB * colSize);
+		}
+		
+		for (int c = 0; c < colSize; c++)
+		{
+			
+			int numX  = 0; 
+			int numO = 0;
+			int numSp = 0;
+			
+			for (int r = 0; r < rowSize; r++)
+			{
+				if (board[r][c] == 'X') numX++;
+				if (board[r][c] == 'O') numO++;
+				if (board[r][c] == ' ') numSp++;
+			}
+			
+			if ((numX > 0) && (numO == 0)) total += (numX * size);
+			if ((numO > 0) && (numX == 0)) total -= (numO * size);
+		}
+		
+		{
+			int numX  = 0; 
+			int numO = 0;
+			int numSp = 0;
+		
+		
+			for (int i = 0; i < size; i++)
+			{
+				
+				
+				if (board[i][i] == 'X') numX++;
+				if (board[i][i] == 'O') numO++;
+				if (board[i][i] == ' ') numSp++;
+			}
+				
+			if ((numX > 0) && (numO == 0)) total += (numX * size);
+			if ((numO > 0) && (numX == 0)) total -= (numO * size); 
+		}
+		
+		
+		{
+			int numX  = 0; 
+			int numO = 0;
+			int numSp = 0;
+		
+		
+			for (int i = 0; i < size; i++)
+			{
+				
+				
+				if (board[i][size - i - 1] == 'X') numX++;
+				if (board[i][size - i - 1] == 'O') numO++;
+				if (board[i][size - i - 1] == ' ') numSp++;
+			}
+				
+			if ((numX > 0) && (numO == 0)) total += (numX * size);
+			if ((numO > 0) && (numX == 0)) total -= (numO * size);
+		}
+		
+		return total;
+		
+	}
+	
+//	@Override
+//	public int getDepth() {
+//		return this.depth;
+//	}
+//
+//	@Override
+//	public char getPlayer( )
+//	{
+//		if (this.lastPlayed == 'X') 
+//			return 'O';
+//		else
+//			return 'X';
+//	}
+	
+	
 }
