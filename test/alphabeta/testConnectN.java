@@ -273,8 +273,6 @@ public class testConnectN {
 		c = new ConnectN(board2);
 		c.lastPlayed='B';
 		assertEquals(true, c.checkRowWin(4)); // Black win
-		
-		
 	}
 
 	/**
