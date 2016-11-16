@@ -7,7 +7,8 @@ import java.util.Scanner;
 public class ConnectN implements State {
 
 	int size;
-	int rowSize, colSize;
+	static int rowSize;
+	static int colSize;
 	char board[][];
 	char lastPlayed = 'R';
 	int depth = 0;
@@ -30,7 +31,7 @@ public class ConnectN implements State {
 	 */
 	public ConnectN ( ConnectN T)
 	{
-	
+
 		this.size = T.size;
 		this.board = new char[T.rowSize][T.colSize];
 		for (int r = 0; r < T.rowSize; r++)
@@ -42,8 +43,8 @@ public class ConnectN implements State {
 		this.rowSize = T.rowSize;
 		this.colSize = T.colSize;
 	}
-	
-	
+
+
 
 	/** Takes in a current board state **/
 	public ConnectN(char board[][])
@@ -189,7 +190,7 @@ public class ConnectN implements State {
 			if (board[r][colToCheck] != ' ')
 				return r;
 		}
-		return -1;
+		return rowSize-1;
 	}
 	/** Uses the user's input to update the board.
 	 * @author Jessica Schlesiger
@@ -217,6 +218,9 @@ public class ConnectN implements State {
 
 		int row = getTopMostColPiece(col);
 
+	//	System.out.println(toString());
+		//System.out.println("row size: "+rowSize+"col size: "+colSize);
+	//	System.out.println("row: "+row+"col: "+col);
 		// Check if a col is a win
 		if ((rowSize-row) >= 0) {
 			if (checkColumnWin(row, col))
@@ -244,7 +248,7 @@ public class ConnectN implements State {
 	{
 		return rowSize;
 	}
-	
+
 	public int getSize()
 	{
 		return size;
@@ -313,20 +317,20 @@ public class ConnectN implements State {
 		LinkedList<State> next = new LinkedList<State>( );
 		for (int r = 0; r < rowSize; r++)
 		{
-			
+
 			for (int c = 0; c < colSize; c++)
 			{
-				
-				if (board[r][c] == ' ') 
+
+				if (board[r][c] == ' ')
 				{
-					
+
 					ConnectN t = new ConnectN(this);
-					
+
 						t.board[r][c] = (lastPlayed == 'R') ? 'B' : 'R';
 						t.lastPlayed = (lastPlayed == 'R') ? 'B' : 'R';
 						t.depth++;
 						next.add((State) t );
-					
+
 				}
 			}
 		}
@@ -498,14 +502,16 @@ public class ConnectN implements State {
 		};
 
 		ConnectN T = new ConnectN(board);
+	//	System.out.println(T.toString());
+		//System.out.println("row size: "+rowSize+"col size: "+colSize);
 
 		/*System.out.println(T.getColSize());
 		System.out.println(T.getRowSize());
 		System.out.println(T.getDepth());
 		System.out.println(T.getPlayer());
 		System.out.println(T.getSize());*/
-		
-		
+
+
 		boolean use_ab = true;
 
 		if (! use_ab) {
