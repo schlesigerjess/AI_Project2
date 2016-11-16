@@ -488,6 +488,70 @@ public class ConnectN implements State {
 			return 'R';
 	}
 
+	/**
+	 * @author shanjones
+	 */
+	public void pushDown()
+	{	
+		int rowSize = board.length;	
+		int colSize = board[0].length;
+		int counter = 0; 
+		int track = rowSize - 1;
+
+
+		for(int c = 0; c < colSize; c++)
+		{
+			for(int r = 0; r < rowSize; r++)
+			{
+				if(board[r][c] != ' ')
+				{
+					while(board[track][c] == ' ')
+					{
+						for(int i = track; i > 0; i--)
+						{
+							board[i][c] = board[i -1][c];
+							board[i-1][c] = ' ';
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @author shanjones
+	 * checks the board to see if it is valid or not
+	 */
+	public void checkBoard()
+	{
+		int rowSize = board.length;	
+		int colSize = board[0].length;
+		int counter = 0; int invalid =0;
+		for(int c = 0; c < colSize; c++)
+		{
+			for(int r = 0; r < rowSize; r++)
+			{
+				if(board[r][c] != ' ')
+				{
+					counter++;
+					if((counter != 0) && (board[rowSize-1][c] == ' '))
+					{
+						//System.out.print("invaild board");
+						invalid++;
+						break;
+					}
+				}
+				
+				
+			}	
+		}
+		
+		if(invalid != 0)
+		{
+			System.out.println("Invalid BOARD!");
+		}
+	}
+	
 	public static void main(String args[])
 	{
 
