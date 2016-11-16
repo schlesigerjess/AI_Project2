@@ -25,17 +25,25 @@ public class ConnectN implements State {
 		lastPlayed = 'R';
 	}
 
+	/**
+	 * @author shanjones CHANGED
+	 */
 	public ConnectN ( ConnectN T)
 	{
+	
 		this.size = T.size;
-		this.board = new char[size][size];
-		for (int r = 0; r < size; r++)
-			for (int c = 0; c < size; c++)
+		this.board = new char[T.rowSize][T.colSize];
+		for (int r = 0; r < T.rowSize; r++)
+			for (int c = 0; c < T.colSize; c++)
 				this.board[r][c] = T.board[r][c];
 
 		this.lastPlayed = T.lastPlayed;
 		this.depth = T.depth;
+		this.rowSize = T.rowSize;
+		this.colSize = T.colSize;
 	}
+	
+	
 
 	/** Takes in a current board state **/
 	public ConnectN(char board[][])
@@ -236,6 +244,11 @@ public class ConnectN implements State {
 	{
 		return rowSize;
 	}
+	
+	public int getSize()
+	{
+		return size;
+	}
 
 	/**
 	 * Checks for a win in a column
@@ -299,16 +312,24 @@ public class ConnectN implements State {
 	{
 		LinkedList<State> next = new LinkedList<State>( );
 		for (int r = 0; r < rowSize; r++)
+		{
+			
 			for (int c = 0; c < colSize; c++)
 			{
-				if (board[r][c] == ' ') {
+				
+				if (board[r][c] == ' ') 
+				{
+					
 					ConnectN t = new ConnectN(this);
-					t.board[r][c] = (lastPlayed == 'R') ? 'B' : 'R';
-					t.lastPlayed = (lastPlayed == 'R') ? 'B' : 'R';
-					t.depth++;
-					next.add((State) t);
+					
+						t.board[r][c] = (lastPlayed == 'R') ? 'B' : 'R';
+						t.lastPlayed = (lastPlayed == 'R') ? 'B' : 'R';
+						t.depth++;
+						next.add((State) t );
+					
 				}
 			}
+		}
 
 		return next;
 	}
@@ -326,7 +347,7 @@ public class ConnectN implements State {
 		}
 
 		//!!!! depth
-		if (this.depth > 8) return true;
+		if (this.depth > 9) return true;
 
 		LinkedList<State> children = next( );
 		for (State S : children) {
@@ -465,26 +486,26 @@ public class ConnectN implements State {
 
 	public static void main(String args[])
 	{
-//		char board[][] = {
-//				{ 'O', ' ', ' ',' ',' ' },
-//				{ ' ', 'X', ' ',' ',' ' },
-//				{ ' ', ' ', ' ',' ', ' ' },
-//				{ ' ', ' ', ' ',' ', ' ' },
-//				{ ' ', ' ', ' ',' ', ' ' }
-//
-//		};
+
 
 		char board[][] = {
 				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
 				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
 				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
 				{ ' ', ' ', 'R', 'R', ' ', ' ', ' ' },
-				{ ' ', 'R', 'B', 'B', ' ', ' ', ' ' },
-				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
+				{ ' ', ' ', 'B', 'B', ' ', ' ', ' ' },
+				{ 'R', ' ', 'B', 'B', ' ', ' ', ' ' },
 		};
 
 		ConnectN T = new ConnectN(board);
 
+		/*System.out.println(T.getColSize());
+		System.out.println(T.getRowSize());
+		System.out.println(T.getDepth());
+		System.out.println(T.getPlayer());
+		System.out.println(T.getSize());*/
+		
+		
 		boolean use_ab = true;
 
 		if (! use_ab) {
@@ -495,7 +516,7 @@ public class ConnectN implements State {
 		}
 		else {
 			AlphaBeta ab = new AlphaBeta('R', 10);
-			State move = ab.getMove(T, false, 7);
+			State move = ab.getMove(T, false, 9);
 			System.out.println(move);
 		}
 
