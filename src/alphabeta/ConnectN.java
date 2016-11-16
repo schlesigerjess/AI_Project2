@@ -29,10 +29,10 @@ public class ConnectN implements State {
 	{
 		this.size = T.size;
 		this.board = new char[size][size];
-		for (int r = 0; r < size; r++) 
+		for (int r = 0; r < size; r++)
 			for (int c = 0; c < size; c++)
 				this.board[r][c] = T.board[r][c];
-		
+
 		this.lastPlayed = T.lastPlayed;
 		this.depth = T.depth;
 	}
@@ -59,7 +59,7 @@ public class ConnectN implements State {
 		else throw new RuntimeException("Error - invalid board state, B="+numB+", R="+numR);
 	}
 
-	/** 
+	/**
 	 * Reads in the column the player wants to place a piece into
 	 * @author Jessica Schlesiger
 	 * @return the colum the player will play in
@@ -86,7 +86,7 @@ public class ConnectN implements State {
 	}
 
 	/**
-	 * Prints out a readable board 
+	 * Prints out a readable board
 	 * @author Jessica Schlesiger
 	 */
 	public String toString() {
@@ -111,6 +111,8 @@ public class ConnectN implements State {
 		}
 		return printBoard;
 	}
+
+
 
 
 	/**
@@ -175,10 +177,26 @@ public class ConnectN implements State {
 	 * @return row
 	 */
 	public int getTopMostColPiece (int colToCheck) {
-		for (int r = 0; r < rowSize; r++)
+		for (int r = 0; r < rowSize; r++) {
 			if (board[r][colToCheck] != ' ')
 				return r;
+		}
 		return -1;
+	}
+	/** Uses the user's input to update the board.
+	 * @author Jessica Schlesiger
+	 */
+	public void updateBoard() {
+		int col = readMove();
+		int row = getTopMostColPiece(col)-1;
+		System.out.println("Row: "+row+"Col: "+col);
+		if (lastPlayed == 'R') {
+		board[row][col] = 'B';
+		lastPlayed = 'B';
+		} else {
+			board[row][col] = 'R';
+			lastPlayed = 'R';
+		}
 	}
 
 	/** Checks for win/loss win most recent move
@@ -186,7 +204,7 @@ public class ConnectN implements State {
 	 * @Author Jessica Schlesiger **/
 	public boolean checkWinOrLoss(int col) {
 
-		if (col > colSize) 
+		if (col > colSize)
 			throw new RuntimeException("Error - col coordinate too large");
 
 		int row = getTopMostColPiece(col);
@@ -208,17 +226,17 @@ public class ConnectN implements State {
 
 		return false; // If no wins, return 0
 	}
-	
+
 	public int getColSize()
 	{
 		return colSize;
 	}
-	
+
 	public int getRowSize()
 	{
 		return rowSize;
 	}
-	
+
 	/**
 	 * Checks for a win in a column
 	 * @return true/false
@@ -253,7 +271,7 @@ public class ConnectN implements State {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @author shanjones & Dr.Briggs
 	 * @return
@@ -271,8 +289,8 @@ public class ConnectN implements State {
 		}
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * @author shanjones & Dr. briggs
 	 * @return
@@ -291,7 +309,7 @@ public class ConnectN implements State {
 					next.add((State) t);
 				}
 			}
-		
+
 		return next;
 	}
 
@@ -306,26 +324,26 @@ public class ConnectN implements State {
 		{
 			if (checkWinOrLoss(i)) return true;
 		}
-		
+
 		//!!!! depth
 		if (this.depth > 8) return true;
-		
+
 		LinkedList<State> children = next( );
 		for (State S : children) {
-			
+
 			ConnectN T = (ConnectN) S;
-			
+
 			for(int i =0 ; i < colSize; i++)
 			{
 				if (T.checkWinOrLoss(i) || T.isDraw())
 					return true;
 			}
-			
+
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * @author shanjones & Dr. Briggs
 	 * @return
@@ -338,34 +356,34 @@ public class ConnectN implements State {
 			{
 				return 1000;
 			}
-			
+
 			if((lastPlayed == 'B') && (checkWinOrLoss(i)))
 			{
 				return -1000;
 			}
-			
+
 			if (isDraw()) return 0;
 		}
-		
-		
+
+
 		if (isTerminal()) {
 			int sum = 0;
 			LinkedList<State> children = next( );
 			for (State S : children) {
-				
+
 				ConnectN T = (ConnectN) S;
 				sum += T.evaluate();
-			}	
-			
+			}
+
 			return sum;
 		}
-		
+
 		else {
 			return evaluate();
 		}
 	}
-	
-	
+
+
 	/**
 	 * @author shanjones & Dr.Briggs
 	 * @return
@@ -378,59 +396,59 @@ public class ConnectN implements State {
 			{
 				return 1000;
 			}
-			
+
 			if((lastPlayed == 'B') && (checkWinOrLoss(i)))
 			{
 				return -1000;
 			}
-			
+
 			if (isDraw()) return 0;
 		}
-		
+
 		int total = 0;
-		
+
 		for (int r = 0; r < rowSize; r++)
 		{
-			
-			int numR  = 0; 
+
+			int numR  = 0;
 			int numB = 0;
 			int numSp = 0;
-			
+
 			for (int c = 0; c < colSize; c++)
 			{
 				if (board[r][c] == 'R') numR++;
 				if (board[r][c] == 'B') numB++;
 				if (board[r][c] == ' ') numSp++;
 			}
-			
+
 			if ((numR > 0) && (numB == 0) && (numSp > 0)) total += (numR * size);
 			if ((numB > 0) && (numR == 0) && (numSp > 0)) total -= (numB * size);
 		}
-		
+
 		for (int c = 0; c < colSize; c++)
 		{
-			
-			int numR  = 0; 
+
+			int numR  = 0;
 			int numB = 0;
 			int numSp = 0;
-			
+
 			for (int r = 0; r < rowSize; r++)
 			{
 				if (board[r][c] == 'X') numR++;
 				if (board[r][c] == 'O') numB++;
 				if (board[r][c] == ' ') numSp++;
 			}
-			
+
 			if ((numR > 0) && (numB == 0)) total += (numR * size);
 			if ((numB > 0) && (numR == 0)) total -= (numB * size);
 		}
-		
-		
-		
+
+
+
 		return total;
-		
+
 	}
-	
+
 	@Override
 	public int getDepth() {
 		return this.depth;
@@ -439,12 +457,12 @@ public class ConnectN implements State {
 	@Override
 	public char getPlayer( )
 	{
-		if (this.lastPlayed == 'R') 
+		if (this.lastPlayed == 'R')
 			return 'B';
 		else
 			return 'R';
 	}
-	
+
 	public static void main(String args[])
 	{
 //		char board[][] = {
@@ -453,10 +471,10 @@ public class ConnectN implements State {
 //				{ ' ', ' ', ' ',' ', ' ' },
 //				{ ' ', ' ', ' ',' ', ' ' },
 //				{ ' ', ' ', ' ',' ', ' ' }
-//				
+//
 //		};
-		
-		char board[][] = { 
+
+		char board[][] = {
 				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
 				{ ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
 				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
@@ -464,14 +482,14 @@ public class ConnectN implements State {
 				{ ' ', 'R', 'B', 'B', ' ', ' ', ' ' },
 				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
 		};
-		
+
 		ConnectN T = new ConnectN(board);
 
 		boolean use_ab = true;
-		
+
 		if (! use_ab) {
 			Minimax M = new Minimax();
-	
+
 			State S = M.minimax_decision(T);
 			System.out.println(S);
 		}
@@ -480,7 +498,7 @@ public class ConnectN implements State {
 			State move = ab.getMove(T, false, 7);
 			System.out.println(move);
 		}
-		
+
 	}
 
 	@Override
