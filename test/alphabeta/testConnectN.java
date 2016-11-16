@@ -391,6 +391,7 @@ public class testConnectN {
 			ConnectN ct1 = new ConnectN(ct.getBoard());
 			AlphaBeta ab = new AlphaBeta('R', 10);
 			State move = ab.getMove(ct1, false, 9);
+			
 			System.out.println(move);
 			
 			

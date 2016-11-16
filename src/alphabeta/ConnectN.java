@@ -528,8 +528,7 @@ public class ConnectN implements State {
 	 */
 	public void pushDown()
 	{	
-		int rowSize = board.length;	
-		int colSize = board[0].length;
+
 		int counter = 0; 
 		int track = rowSize - 1;
 
