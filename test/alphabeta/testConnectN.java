@@ -388,6 +388,11 @@ public class testConnectN {
 			ConnectN ct = new ConnectN(bsize, piece);
 			System.out.println(ct.toString());
 			
+			ConnectN ct1 = new ConnectN(ct.getBoard());
+			AlphaBeta ab = new AlphaBeta('R', 10);
+			State move = ab.getMove(ct1, false, 9);
+			System.out.println(move);
+			
 			
 		}
 		
@@ -395,5 +400,8 @@ public class testConnectN {
 		
 		
 	}
+
+
+	
 
 }

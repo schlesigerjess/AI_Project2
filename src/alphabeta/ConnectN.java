@@ -26,6 +26,12 @@ public class ConnectN implements State {
 		lastPlayed = 'R';
 	}
 	
+	/**
+	 * sets up start board
+	 * @author shanjones
+	 * @param size
+	 * @param userCol
+	 */
 	public ConnectN(int size, int userCol)
 	{
 		this.size=size;
@@ -39,7 +45,7 @@ public class ConnectN implements State {
 				if((c == userCol) && (r == (rowSize - 1)))
 				{
 					board[r][c] = 'B';
-					lastPlayed = 'B';
+					//lastPlayed = 'B';
 				}else
 				{
 					board[r][c] = ' ';
@@ -69,7 +75,10 @@ public class ConnectN implements State {
 		this.colSize = T.colSize;
 	}
 
-
+	public char[][] getBoard()
+	{
+		return board;
+	}
 
 	/** Takes in a current board state **/
 	public ConnectN(char board[][])
