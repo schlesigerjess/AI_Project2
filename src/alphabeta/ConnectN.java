@@ -25,6 +25,31 @@ public class ConnectN implements State {
 				board[r][c] = ' ';
 		lastPlayed = 'R';
 	}
+	
+	public ConnectN(int size, int userCol)
+	{
+		this.size=size;
+		rowSize=2*(size-1);
+		colSize=2*size-1;
+		board = new char[rowSize][colSize];
+		for (int r = 0; r < (2*(size-1)); r++) // Rows
+		{
+			for (int c = 0; c < (2*size-1); c++) // Column
+			{
+				if((c == userCol) && (r == (rowSize - 1)))
+				{
+					board[r][c] = 'B';
+					lastPlayed = 'B';
+				}else
+				{
+					board[r][c] = ' ';
+				}
+				
+			}
+				
+		}
+			
+	}
 
 	/**
 	 * @author shanjones CHANGED
@@ -192,6 +217,7 @@ public class ConnectN implements State {
 		}
 		return rowSize-1;
 	}
+	
 	/** Uses the user's input to update the board.
 	 * @author Jessica Schlesiger
 	 */
@@ -562,9 +588,11 @@ public class ConnectN implements State {
 				{ ' ', ' ', ' ', 'R', ' ', ' ', ' ' },
 				{ ' ', ' ', 'R', 'R', ' ', ' ', ' ' },
 				{ ' ', ' ', 'B', 'B', ' ', ' ', ' ' },
-				{ 'R', ' ', 'B', 'B', ' ', ' ', ' ' },
+				{ 'R', 'B', 'B', 'B', ' ', ' ', ' ' },
 		};
 
+		
+		
 		ConnectN T = new ConnectN(board);
 	//	System.out.println(T.toString());
 		//System.out.println("row size: "+rowSize+"col size: "+colSize);
@@ -588,6 +616,7 @@ public class ConnectN implements State {
 			AlphaBeta ab = new AlphaBeta('R', 10);
 			State move = ab.getMove(T, false, 9);
 			System.out.println(move);
+			
 		}
 
 	}

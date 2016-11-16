@@ -54,7 +54,7 @@ public class AlphaBeta {
 		for (State child : children)
 		{
 			double value = alpha_beta(child, max_depth, -Double.MAX_VALUE, Double.MAX_VALUE, maxPlayer);
-			System.out.format("%f %s\n", value, child);
+			//System.out.format("%f %s\n", value, child);
 			if (value > maxV) {
 				maxV = value;
 				best = child;

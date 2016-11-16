@@ -1,6 +1,8 @@
 package alphabeta;
 import static org.junit.Assert.*;
 
+import java.util.Scanner;
+
 import org.junit.Test;
 
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -363,6 +365,35 @@ public class testConnectN {
 			assertEquals(2*size-1, c.board[0].length); // Checks column
 			assertEquals(2*(size-1), c.board.length); // Checks row
 		}
+	}
+	
+	/**
+	 * this test is play the game ...user interaction
+	 */
+	@Test
+	public void PlayGame()
+	{
+		System.out.println("Enter size of the board you would like:" );
+		Scanner scan = new Scanner(System.in);
+		int bsize = scan.nextInt();
+		System.out.println("Would you like to start first? 0 for NO; 1 for YES");
+		Scanner scan1 = new Scanner(System.in);
+		int play = scan.nextInt();
+
+		if(play == 1)
+		{
+			System.out.println("Which column would to like to place your piece in?  (0 -" + ((2 * bsize -1) -1 ) + ")");
+			Scanner scan2 = new Scanner (System.in);
+			int piece = scan2.nextInt();
+			ConnectN ct = new ConnectN(bsize, piece);
+			System.out.println(ct.toString());
+			
+			
+		}
+		
+		
+		
+		
 	}
 
 }
